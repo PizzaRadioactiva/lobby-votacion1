@@ -469,6 +469,13 @@ public class Servidor {
         }
 
         public void handle(HttpExchange ex) throws IOException {
+            // --- VALIDACIÓN PARA RENDER (Evita el warning de HEAD) ---
+            if (ex.getRequestMethod().equalsIgnoreCase("HEAD")) {
+                ex.sendResponseHeaders(200, -1); 
+                return; 
+            }
+            // ---------------------------------------------------------
+
             String path = ex.getRequestURI().getPath();
             String rel = path.substring(prefijo.length());
             if (rel.isEmpty() || rel.equals("/")) rel = "index.html";
